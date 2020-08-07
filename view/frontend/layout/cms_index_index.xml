@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<head>
+        	<link src="Magepow_Autorelated::css/owl.carousel.min.css"/>
+        	<link src="Magepow_Autorelated::css/owl.carousel.min.css"/>
+    	</head>
+        <referenceContainer name="content">
+            <block class="Magepow\Autorelated\Block\Related" name="home_page" template="Magepow_Autorelated::homepage.phtml" ifconfig="magepow_autorelated/general/enabled"/>
+        </referenceContainer>
+    </body>
+</page>

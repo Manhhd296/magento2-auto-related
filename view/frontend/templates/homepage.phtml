@@ -1,0 +1,12 @@
+<?php
+$relatedHomes = $block->getHomePage();
+foreach ($relatedHomes as $relatedHome) {
+	$stringIds = $relatedHome->getProducts();
+	$proIds = explode(",",$stringIds);
+	$_productCollection = $block->getProductCollection($proIds);
+	foreach ($_productCollection as $pro) {
+		echo '<pre>';
+		var_dump($pro->getData());
+		echo '</pre>';		
+	}
+}
