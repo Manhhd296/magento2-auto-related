@@ -52,7 +52,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $form->setHtmlIdPrefix('wkgrid_');
+        $form->setHtmlIdPrefix('magepowautorelated_');
         if ($model->getEntityId()) {
             $fieldset = $form->addFieldset(
                 'base_fieldset',
@@ -84,12 +84,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'text',
             [
                 'name' => 'products',
-                'label' => __('Products'),
+                'label' => __('Products ID'),
                 'id' => 'products',
-                'title' => __('Products'),
+                'title' => __('Products ID'),
                 'class' => 'required-entry',
                 'required' => true,
-                'comments' => 'Enter the product ids separated by commas',
+                'after_element_html' => 'Enter the product ids separated by commas. Ex: 1,2,3,4,5.',
             ]
         );
 
@@ -103,6 +103,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Position'),
                 'values' => $this->_position->getOptionArray(),
                 'class' => 'position',
+                'required' => true,
+            ]
+        );
+
+        $fieldset->addField(
+            'slider',
+            'select',
+            [
+                'name' => 'slider',
+                'label' => __('Slider'),
+                'id' => 'slider',
+                'title' => __('Slider'),
+                'values' => $this->_options->getOptionArray(),
+                'class' => 'slider',
                 'required' => true,
             ]
         );

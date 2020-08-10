@@ -9,7 +9,7 @@
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Add New Rule</item>
+                <item name="label" xsi:type="string" translate="true">Add New</item>
                 <item name="class" xsi:type="string">primary</item>
                 <item name="url" xsi:type="string">*/*/addrow</item>
             </item>
@@ -126,7 +126,7 @@
        <column name="products">
            <argument name="data" xsi:type="array">
                <item name="config" xsi:type="array">
-                   <item name="label" xsi:type="string" translate="true">Products</item>
+                   <item name="label" xsi:type="string" translate="true">Products ID</item>
                </item>
            </argument>
        </column>
@@ -141,13 +141,26 @@
                </item>
            </argument>
        </column>
-       <column name="stores">
+<!--        <column name="stores">
            <argument name="data" xsi:type="array">
                <item name="config" xsi:type="array">
                    <item name="label" xsi:type="string" translate="true">Stores</item>
                </item>
            </argument>
+       </column> -->
+
+       <column name="slider" >
+           <argument name="data" xsi:type="array">
+               <item name="options" xsi:type="object">Magepow\Autorelated\Model\Slider</item>
+               <item name="config" xsi:type="array">
+                   <item name="filter" xsi:type="string">select</item>
+                   <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                   <item name="dataType" xsi:type="string">select</item>
+                   <item name="label" xsi:type="string" translate="true">Slider</item>
+               </item>
+           </argument>
        </column>
+
        <column name="is_active" >
            <argument name="data" xsi:type="array">
                <item name="options" xsi:type="object">Magepow\Autorelated\Model\Status</item>

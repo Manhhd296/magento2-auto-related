@@ -1,9 +1,9 @@
 var config = {
     paths: {
-        'magepow/owl': 'Magepow_Autorelated/js/owl.carousel.min'
+        slick: 'Magepow_Autorelated/js/slick'
     },
     shim: {
-        'magepow/owl': {
+        slick: {
             deps: ['jquery']
         }
     }

@@ -11,6 +11,7 @@ interface GridInterface
     const PRODUCTS = 'products';
     const POSITION = 'position';
     const STORES = 'stores';
+    const SLIDER = 'slider';
     const IS_ACTIVE = 'is_active';
 
    /**
@@ -74,6 +75,18 @@ interface GridInterface
     public function setStores($stores);
 
    /**
+    * Get Slider.
+    *
+    * @return varchar
+    */
+    public function getSlider();
+
+   /**
+    * Set Slider.
+    */
+    public function setSlider($slider);
+
+    /**
     * Get IsActive.
     *
     * @return varchar
@@ -81,7 +94,7 @@ interface GridInterface
     public function getIsActive();
 
    /**
-    * Set StartingPrice.
+    * Set IsActive.
     */
     public function setIsActive($isActive);
 

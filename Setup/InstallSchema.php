@@ -61,6 +61,12 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => false],
             'Stores'
         )->addColumn(
+            'slider',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Active Slider'
+        )->addColumn(
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,

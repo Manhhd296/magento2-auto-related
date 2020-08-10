@@ -120,6 +120,24 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
     }
 
     /**
+     * Get Slider.
+     *
+     * @return varchar
+     */
+    public function getSlider()
+    {
+        return $this->getData(self::SLIDER);
+    }
+
+    /**
+     * Set Slider.
+     */
+    public function setSlider($slider)
+    {
+        return $this->setData(self::SLIDER, $slider);
+    }
+
+    /**
      * Get IsActive.
      *
      * @return varchar

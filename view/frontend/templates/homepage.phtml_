@@ -1,0 +1,215 @@
+<?php
+use Magento\Framework\App\Action\Action;
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data'); 
+$relateds = $block->getHomePage();
+$counter = 0;
+foreach ($relateds as $related) {
+	if ($counter >= 1) 
+    break;
+   	$counter++;
+	$stringIds = $related->getProducts();
+	$title = $related->getTitle();
+	$slider = $related->getSlider();
+	// echo $slider;
+	$proIds = explode(",",$stringIds);
+	$_productCollection = $block->getProductCollection($proIds);
+	?>
+	<div class="title"><h2><?php echo $title; ?></h2></div>
+	<?php if($slider == 1): ?>
+		<section class="regular slider">
+	<?php else: ?>
+		<section class="product-related">
+	<?php endif; ?>
+	<?php
+	foreach ($_productCollection as $pro) {
+        $listBlock = $objectManager->get('\Magento\Catalog\Block\Product\ListProduct');
+        $addToCartUrl =  $listBlock->getAddToCartUrl($pro);                     
+		// echo '<pre>';
+		// var_dump($pro->getData());
+		// echo '</pre>';		
+		$_imageHelper = $this->helper('Magento\Catalog\Helper\Image');
+				$imageUrl = $_imageHelper->init($pro, 'product_base_image')
+                ->constrainOnly(TRUE)
+                ->keepAspectRatio(TRUE)
+                ->keepTransparency(TRUE)
+                ->keepFrame(TRUE)
+                ->resize(300, 240)->getUrl();
+                ?>
+                <a class="product" href="<?php echo $pro->getProductUrl(); ?>">
+                <div class="items">
+                <h3 class="product-name"><?php echo $pro->getName(); ?></h3>
+				<img class="stickyImg" src="<?php echo $imageUrl; ?>">
+				<div class="price"><?php echo $priceHelper->currency($pro->getFinalPrice(), true, false); ?></div>
+                <?php
+                    $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
+                ?>
+                    <a href="#"
+                       class="action tocompare"
+                       title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+                       aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+                       data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($pro); ?>'
+                       role="button">
+                        <i class="icon-bar-chart icons"></i><?php /* @escapeNotVerified */ echo __('Add to Compare') ?>
+                    </a>
+
+                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+                    <a href="#"
+                       data-post='<?= /** @noEscape */ $block->getAddToWishlistParams($pro); ?>'
+                       class="action towishlist" data-action="add-to-wishlist"
+                       title="<?= /** @noEscape */ __('Add to Wish List') ?>">
+                        <span><?= /** @noEscape */ __('Add to Wish List') ?></span>
+                    </a>
+                <?php endif; ?>
+                <div class="addToCart">
+                    <form data-role="tocart-form" action="<?php echo $addToCartUrl; ?>" method="post"> 
+                    	<?php echo $block->getBlockHtml('formkey')?>
+                    	<button type="submit" title="Add to Cart" class="tocart"></button>
+	                </form>
+	            </div>
+	            </div>
+				</a>
+
+
+
+                <?php
+	}
+	?>
+</section>
+<?php
+}
+?>
+<script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+                   "bindSubmit": true
+                 }
+            }
+        }
+ </script>
+<style type="text/css">
+    .slider {
+        /*width: 50%;*/
+        /*margin: 100px auto;*/
+    }
+
+    .slick-slide {
+      margin: 0px 20px;
+    }
+
+    .slick-slide img {
+      width: 100%;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      color: black;
+    }
+
+
+    .slick-slide {
+      transition: all ease-in-out .3s;
+      /*opacity: .2;*/
+    }
+    
+/*    .slick-active {
+      opacity: .5;
+    }
+
+    .slick-current {
+      opacity: 1;
+    }*/
+  </style>
+
+<script type="text/javascript">
+	require(['jquery', 'jquery/ui', 'slick'], function($) {
+	    $(document).ready(function() {
+	        $(".regular").slick({
+	            dots: true,
+	            infinite: true,
+	            slidesToShow: 4,
+	            slidesToScroll: 1
+	        });
+	        $(".lazy").slick({
+	            lazyLoad: 'ondemand', // ondemand progressive anticipated
+	            infinite: true
+	        });
+	    });
+	});
+</script>
+
+<div class="product-slider-block block widget block-products-list">
+        <h2 class="product-slider-title"><?php echo $title; ?></h2>
+    </div>
+    <div class="block-content product-slider-content">
+        <div class="products">
+            <ol class="product-items widget-viewed-grid">
+                <div id="list-items">
+                    <?php foreach ($items as $_item) : ?>
+                        <li class="product-item product-slider">
+                        <div class="slider-product-item-info">
+                            <img src="<?php echo $imageUrl; ?>"
+                               class="product photo slider-product-item-photo">
+                            <div class="product details slider-product-item-details">
+                                <strong class="product name product-item-name">
+                                    <a title="<?php echo $pro->getName(); ?>"
+                                       href="<?php echo $pro->getName(); ?>">
+                                        <?php echo $pro->getName(); ?>
+                                    </a>
+                                </strong>
+
+                                <?php echo $priceHelper->currency($pro->getFinalPrice(), true, false); ?>
+
+                                <div class="product actions slider-product-item-actions product-item-actions">
+                                    <?php if ($block->canShowAddToCart()) : ?>
+                                        <div class="actions-primary">
+                                            <?php if ($_item->isSaleable()) : ?>
+                                                <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+                                                <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
+                                                    <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
+                                                    <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                    <?= $block->getBlockHtml('formkey') ?>
+                                                    <button type="submit"
+                                                            title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                                                            class="action tocart primary">
+                                                        <span><?= /** @noEscape */ __('Add to Cart') ?></span>
+                                                    </button>
+                                                </form>
+                                            <?php else : ?>
+                                                <?php if ($_item->getIsSalable()) : ?>
+                                                    <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                                <?php else : ?>
+                                                    <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="secondary-addto-links actions-secondary"
+                                             data-role="add-to-links">
+                                            <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+                                                <a href="#"
+                                                   data-post='<?= /** @noEscape */ $block->getAddToWishlistParams($_item); ?>'
+                                                   class="action towishlist" data-action="add-to-wishlist"
+                                                   title="<?= /** @noEscape */ __('Add to Wish List') ?>">
+                                                    <span><?= /** @noEscape */ __('Add to Wish List') ?></span>
+                                                </a>
+                                            <?php endif; ?>
+                                            <?php if ($block->getAddToCompareUrl()) : ?>
+                                                <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
+                                                <a href="#" class="action tocompare"
+                                                   data-post='<?= /** @noEscape */ $compareHelper->getPostDataParams($_item); ?>'
+                                                   data-role="add-to-links"
+                                                   title="<?= /** @noEscape */ __('Add to Compare') ?>">
+                                                    <span><?= /** @noEscape */ __('Add to Compare') ?></span>
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                      </li>
+                    <?php endforeach ?>
+                </div>
+            </ol>
+        </div>

@@ -1,5 +1,4 @@
 <?php
-
 namespace Magepow\Autorelated\Block;
 
 Class Related extends \Magento\Framework\View\Element\Template
@@ -7,64 +6,73 @@ Class Related extends \Magento\Framework\View\Element\Template
 	protected $gridFactory;
 
 	protected $_productCollectionFactory;
+
+
+
 	
 	public function __construct(
 		\Magento\Framework\View\Element\Template\Context $context,
 		\Magepow\Autorelated\Model\GridFactory $gridFactory,
+		\Magento\Catalog\Block\Product\ListProduct $listProductBlock,
 		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
 	){
 		parent::__construct($context);
 		$this->gridFactory = $gridFactory;
+		$this->listProductBlock = $listProductBlock;
 		$this->_productCollectionFactory = $productCollectionFactory;
 	}
-	
-	public function getProductPage()
+
+
+	public function getRelated($position)
 	{	
 		$collection = $this->gridFactory->create()->getCollection();
 		$collection->addFieldToFilter('is_active',1);
-		$collection->addFieldToFilter('position',3);
+		$collection->addFieldToFilter('position',$position);
 	
 		return $collection;
 	}	
-
-	public function getCartPage()
-	{	
-		$collection = $this->gridFactory->create()->getCollection();
-		$collection->addFieldToFilter('is_active',1);
-		$collection->addFieldToFilter('position',2);
-	
-		return $collection;
-	}	
-
-	public function getHomePage()
-	{	
-		$collection = $this->gridFactory->create()->getCollection();
-		$collection->addFieldToFilter('is_active',1);
-		$collection->addFieldToFilter('position',1);
-	
-		return $collection;
-	}	
-
-	public function getCategoryPage()
-	{	
-		$collection = $this->gridFactory->create()->getCollection();
-		$collection->addFieldToFilter('is_active',1);
-		$collection->addFieldToFilter('position',0);
-	
-		return $collection;
-	}
 
 	public function getProductCollection($productId)
 	{
-		 // Ids=array(1,2,3);
 		 $collection = $this->_productCollectionFactory->create();
-		 $collection->addAttributeToSelect('*');   //semicolon is missing                  
+		 $collection->addAttributeToSelect('*');             
 		 $collection->addFieldToFilter('entity_id', ['in' => $productId]);
 		 return $collection;
 	}
 
-	// public function getLoadProduct($arrayId)
-	// {
-	// 	$collection = $this->getCollection()->addFieldToFilter('product', array('in' => $arrayId));
-	// }
+	public function getAddToCartPostParams($product)
+	{
+	    return $this->listProductBlock->getAddToCartPostParams($product);
+	}
+
+
+    public function getProductPrice(\Magento\Catalog\Model\Product $product)
+    {
+        return $this->getProductPriceHtml(
+            $product,
+            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+            \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+        );
+    }  
+
+    public function getProductPriceHtml(
+        \Magento\Catalog\Model\Product $product,
+        $priceType,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        array $arguments = []
+    ) {
+        if (!isset($arguments['zone'])) {
+            $arguments['zone'] = $renderZone;
+        }
+
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        $priceRender = $this->getLayout()->getBlock('product.price.render.default');
+        $price = '';
+
+        if ($priceRender) {
+            $price = $priceRender->render($priceType, $product, $arguments);
+        }
+        return $price;
+    }
+
 }
