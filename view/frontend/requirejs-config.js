@@ -1,10 +1,15 @@
 var config = {
     paths: {
-        slick: 'Magepow_Autorelated/js/slick'
+        'slick': "Magepow_Autorelated/js/slick.min"
     },
-    shim: {
+    map: {
+       '*': {
+           magepowRelated: 'Magepow_Autorelated/js/magepowRelated'
+       }
+   },
+   shim: {
         slick: {
             deps: ['jquery']
         }
-    }
+   },
 };

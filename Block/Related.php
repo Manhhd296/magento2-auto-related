@@ -7,19 +7,21 @@ Class Related extends \Magento\Framework\View\Element\Template
 
 	protected $_productCollectionFactory;
 
-
+	protected $_request;
 
 	
 	public function __construct(
 		\Magento\Framework\View\Element\Template\Context $context,
 		\Magepow\Autorelated\Model\GridFactory $gridFactory,
 		\Magento\Catalog\Block\Product\ListProduct $listProductBlock,
-		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+		\Magento\Framework\App\Request\Http $request
 	){
 		parent::__construct($context);
 		$this->gridFactory = $gridFactory;
 		$this->listProductBlock = $listProductBlock;
 		$this->_productCollectionFactory = $productCollectionFactory;
+		$this->_request = $request;
 	}
 
 
@@ -75,4 +77,13 @@ Class Related extends \Magento\Framework\View\Element\Template
         return $price;
     }
 
+
+	public function isPage($page)
+	{
+
+	    if ($this->_request->getFullActionName() == $page) {
+	        return true;
+	    }
+	    return false;
+	}	
 }

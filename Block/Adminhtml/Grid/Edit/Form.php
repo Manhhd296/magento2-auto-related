@@ -11,25 +11,31 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $_systemStore;
 
+    // protected $_trueFalse;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context,
      * @param \Magento\Framework\Registry $registry,
      * @param \Magento\Framework\Data\FormFactory $formFactory,
-     * @param \Magepow\Autorelated\Model\Status $options,
+     * @param \Magepow\Autorelated\Model\Status $status,
+     * @param \Magepow\Autorelated\Model\Slider $slider,
      * @param \Magepow\Autorelated\Model\Position $position,
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magepow\Autorelated\Model\Status $options,
+        \Magepow\Autorelated\Model\Status $status,
+        \Magepow\Autorelated\Model\Slider $slider,
         \Magepow\Autorelated\Model\Position $position,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
     ) {
-        $this->_options = $options;
+        $this->_status = $status;
+        $this->_slider = $slider;
         $this->_position = $position;
         $this->_systemStore = $systemStore;
+        // $this->_trueFalse = ['true' => __('True'), 'false' => __('False')];
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -115,7 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Slider'),
                 'id' => 'slider',
                 'title' => __('Slider'),
-                'values' => $this->_options->getOptionArray(),
+                'values' => $this->_slider->getOptionArray(),
                 'class' => 'slider',
                 'required' => true,
             ]
@@ -155,7 +161,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Status'),
                 'id' => 'is_active',
                 'title' => __('Status'),
-                'values' => $this->_options->getOptionArray(),
+                'values' => $this->_status->getOptionArray(),
                 'class' => 'status',
                 'required' => true,
             ]
