@@ -67,6 +67,30 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Active Slider'
         )->addColumn(
+            'cart',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Show Add To Cart'
+        )->addColumn(
+            'compare',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Show Compare'
+        )->addColumn(
+            'wishlist',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Show Wishlist'
+        )->addColumn(
+            'review',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [],
+            'Show Review'
+        )->addColumn(
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,

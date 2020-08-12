@@ -1,6 +1,6 @@
 var config = {
     paths: {
-        'slick': "Magepow_Autorelated/js/slick.min"
+        'slick': "Magepow_Autorelated/js/slick"
     },
     map: {
        '*': {

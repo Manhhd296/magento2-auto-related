@@ -29,7 +29,7 @@ class Index extends \Magento\Backend\App\Action
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magepow_Autorelated::grid_list');
-        $resultPage->getConfig()->getTitle()->prepend(__('Related Product Rules'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Related Product'));
         return $resultPage;
     }
 

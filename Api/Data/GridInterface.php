@@ -7,11 +7,15 @@ interface GridInterface
      * Constants for keys of data array. Identical to the name of the getter in snake case.
      */
     const ENTITY_ID = 'entity_id';
-    const TITLE = 'title';
-    const PRODUCTS = 'products';
-    const POSITION = 'position';
-    const STORES = 'stores';
-    const SLIDER = 'slider';
+    const TITLE     = 'title';
+    const PRODUCTS  = 'products';
+    const POSITION  = 'position';
+    const STORES    = 'stores';
+    const SLIDER    = 'slider';
+    const CART      = 'cart';
+    const COMPARE   = 'compare';
+    const WISHLIST  = 'wishlist';
+    const REVIEW  = 'review';
     const IS_ACTIVE = 'is_active';
 
    /**
@@ -84,7 +88,55 @@ interface GridInterface
    /**
     * Set Slider.
     */
-    public function setSlider($slider);
+    public function setSlider($slider);   
+
+    /**
+    * Get Cart.
+    *
+    * @return varchar
+    */
+    public function getCart();
+
+   /**
+    * Set Cart.
+    */
+    public function setCart($cart);   
+
+    /**
+    * Get Compare.
+    *
+    * @return varchar
+    */
+    public function getCompare();
+
+   /**
+    * Set Compare.
+    */
+    public function setCompare($compare);   
+
+    /**
+    * Get Wishlist.
+    *
+    * @return varchar
+    */
+    public function getWishlist();
+
+   /**
+    * Set Wishlist.
+    */
+    public function setWishlist($wishlist);     
+
+    /**
+    * Get Review.
+    *
+    * @return varchar
+    */
+    public function getReview();
+
+   /**
+    * Set Review.
+    */
+    public function setReview($review);   
 
     /**
     * Get IsActive.

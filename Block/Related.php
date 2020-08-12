@@ -9,19 +9,35 @@ Class Related extends \Magento\Framework\View\Element\Template
 
 	protected $_request;
 
+	/**
+     * @var ReviewRendererInterface
+     */
+    protected $reviewRenderer;
+
+    /**
+     * @var ImageBuilder
+     * @since 102.0.0
+     */
+    protected $imageBuilder;
+
+
 	
 	public function __construct(
-		\Magento\Framework\View\Element\Template\Context $context,
+		// \Magento\Framework\View\Element\Template\Context $context,
 		\Magepow\Autorelated\Model\GridFactory $gridFactory,
 		\Magento\Catalog\Block\Product\ListProduct $listProductBlock,
 		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-		\Magento\Framework\App\Request\Http $request
+		\Magento\Framework\App\Request\Http $request,
+		\Magento\Catalog\Block\Product\Context $context,
+		array $data = []
 	){
-		parent::__construct($context);
 		$this->gridFactory = $gridFactory;
 		$this->listProductBlock = $listProductBlock;
 		$this->_productCollectionFactory = $productCollectionFactory;
 		$this->_request = $request;
+		$this->reviewRenderer = $context->getReviewRenderer();
+        $this->imageBuilder = $context->getImageBuilder();
+		parent::__construct($context, $data);
 	}
 
 
@@ -39,6 +55,7 @@ Class Related extends \Magento\Framework\View\Element\Template
 		 $collection = $this->_productCollectionFactory->create();
 		 $collection->addAttributeToSelect('*');             
 		 $collection->addFieldToFilter('entity_id', ['in' => $productId]);
+         $collection->addAttributeToFilter('status',\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
 		 return $collection;
 	}
 
@@ -85,5 +102,123 @@ Class Related extends \Magento\Framework\View\Element\Template
 	        return true;
 	    }
 	    return false;
-	}	
+	}
+
+    /**
+     * Retrieve product details html
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return mixed
+     */
+    public function getProductDetailsHtml(\Magento\Catalog\Model\Product $product)
+    {
+        $renderer = $this->getDetailsRenderer($product->getTypeId());
+        if ($renderer) {
+            $renderer->setProduct($product);
+            return $renderer->toHtml();
+        }
+        return '';
+    }
+
+    /**
+     * Get the renderer that will be used to render the details block
+     *
+     * @param string|null $type
+     * @return bool|\Magento\Framework\View\Element\AbstractBlock
+     */
+    public function getDetailsRenderer($type = null)
+    {
+        if ($type === null) {
+            $type = 'default';
+        }
+        $rendererList = $this->getDetailsRendererList();
+        if ($rendererList) {
+            return $rendererList->getRenderer($type, 'default');
+        }
+        return null;
+    }
+
+    /**
+     * Return the list of details
+     *
+     * @return \Magento\Framework\View\Element\RendererList
+     */
+    protected function getDetailsRendererList()
+    {
+        return $this->getDetailsRendererListName() ? $this->getLayout()->getBlock(
+            $this->getDetailsRendererListName()
+        ) : $this->getChildBlock(
+            'details.renderers'
+        );
+    }
+
+        /**
+     * Get product reviews summary
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param bool $templateType
+     * @param bool $displayIfNoReviews
+     * @return string
+     */
+    public function getReviewsSummaryHtml(
+        \Magento\Catalog\Model\Product $product,
+        $templateType = false,
+        $displayIfNoReviews = false
+    ) {
+        return $this->reviewRenderer->getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->create($product, $imageId, $attributes);
+    }
+
+
+    /**
+     * Retrieve Product URL using UrlDataObject
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $additional the route params
+     * @return string
+     */
+    public function getProductUrl($product, $additional = [])
+    {
+        if ($this->hasProductUrl($product)) {
+            if (!isset($additional['_escape'])) {
+                $additional['_escape'] = true;
+            }
+            return $product->getUrlModel()->getUrl($product, $additional);
+        }
+
+        return '#';
+    }
+
+    /**
+     * Check Product has URL
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    public function hasProductUrl($product)
+    {
+        if ($product->getVisibleInSiteVisibilities()) {
+            return true;
+        }
+        if ($product->hasUrlDataObject()) {
+            if (in_array($product->hasUrlDataObject()->getVisibility(), $product->getVisibleInSiteVisibilities())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

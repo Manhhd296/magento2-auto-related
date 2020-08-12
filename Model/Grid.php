@@ -135,6 +135,78 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
     public function setSlider($slider)
     {
         return $this->setData(self::SLIDER, $slider);
+    }    
+
+    /**
+     * Get Cart.
+     *
+     * @return varchar
+     */
+    public function getCart()
+    {
+        return $this->getData(self::CART);
+    }
+
+    /**
+     * Set Cart.
+     */
+    public function setCart($cart)
+    {
+        return $this->setData(self::CART, $cart);
+    }    
+
+    /**
+     * Get Compare.
+     *
+     * @return varchar
+     */
+    public function getCompare()
+    {
+        return $this->getData(self::COMPARE);
+    }
+
+    /**
+     * Set Compare.
+     */
+    public function setCompare($compare)
+    {
+        return $this->setData(self::COMPARE, $compare);
+    }    
+
+    /**
+     * Get Wishlist.
+     *
+     * @return varchar
+     */
+    public function getWishlist()
+    {
+        return $this->getData(self::WISHLIST);
+    }
+
+    /**
+     * Set Wishlist.
+     */
+    public function setWishlist($wishlist)
+    {
+        return $this->setData(self::WISHLIST, $wishlist);
+    }    
+
+    /**
+     * Get Review.
+     *
+     * @return varchar
+     */
+    public function getReview()
+    {
+        return $this->getData(self::REVIEW);
+    }
+
+    /**
+     * Set Review.
+     */
+    public function setReview($review)
+    {
+        return $this->setData(self::REVIEW, $review);
     }
 
     /**
@@ -154,5 +226,4 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
-
 }

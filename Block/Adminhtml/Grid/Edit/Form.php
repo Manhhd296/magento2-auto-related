@@ -11,8 +11,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $_systemStore;
 
-    // protected $_trueFalse;
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context,
      * @param \Magento\Framework\Registry $registry,
@@ -26,16 +24,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magepow\Autorelated\Model\Status $status,
-        \Magepow\Autorelated\Model\Slider $slider,
+        \Magepow\Autorelated\Model\Yesno $yesno,
         \Magepow\Autorelated\Model\Position $position,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
     ) {
         $this->_status = $status;
-        $this->_slider = $slider;
+        $this->_yesno = $yesno;
         $this->_position = $position;
         $this->_systemStore = $systemStore;
-        // $this->_trueFalse = ['true' => __('True'), 'false' => __('False')];
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -58,17 +55,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $form->setHtmlIdPrefix('magepowautorelated_');
+        $form->setHtmlIdPrefix('mage_');
         if ($model->getEntityId()) {
             $fieldset = $form->addFieldset(
                 'base_fieldset',
-                ['legend' => __('Edit Row Data'), 'class' => 'fieldset-wide']
+                ['legend' => __('Edit Related Product'), 'class' => 'fieldset-wide']
             );
             $fieldset->addField('entity_id', 'hidden', ['name' => 'entity_id']);
         } else {
             $fieldset = $form->addFieldset(
                 'base_fieldset',
-                ['legend' => __('Add Row Data'), 'class' => 'fieldset-wide']
+                ['legend' => __('Add Related Product'), 'class' => 'fieldset-wide']
             );
         }
 
@@ -80,8 +77,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Title'),
                 'id' => 'title',
                 'title' => __('Title'),
-                'class' => 'required-entry',
-                'required' => true,
+                'class' => 'required-entry'
             ]
         );
 
@@ -90,9 +86,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'text',
             [
                 'name' => 'products',
-                'label' => __('Products ID'),
+                'label' => __('Related product ids'),
                 'id' => 'products',
-                'title' => __('Products ID'),
+                'title' => __('Related product ids'),
                 'class' => 'required-entry',
                 'required' => true,
                 'after_element_html' => 'Enter the product ids separated by commas. Ex: 1,2,3,4,5.',
@@ -104,12 +100,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'select',
             [
                 'name' => 'position',
-                'label' => __('Position'),
+                'label' => __('Product display position'),
                 'id' => 'position',
-                'title' => __('Position'),
+                'title' => __('Product display position'),
                 'values' => $this->_position->getOptionArray(),
-                'class' => 'position',
-                'required' => true,
+                'class' => 'position'
             ]
         );
 
@@ -118,12 +113,68 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'select',
             [
                 'name' => 'slider',
-                'label' => __('Slider'),
+                'label' => __('Active Slider'),
                 'id' => 'slider',
-                'title' => __('Slider'),
-                'values' => $this->_slider->getOptionArray(),
+                'title' => __('Active Slider'),
+                'values' => $this->_yesno->getOptionArray(),
                 'class' => 'slider',
-                'required' => true,
+                'value' => 1,
+            ]
+        );        
+
+        $fieldset->addField(
+            'cart',
+            'select',
+            [
+                'name' => 'cart',
+                'label' => __('Show Cart'),
+                'id' => 'cart',
+                'title' => __('Show Cart'),
+                'values' => $this->_yesno->getOptionArray(),
+                'class' => 'cart',
+                'value' => 1,
+            ]
+        );        
+
+        $fieldset->addField(
+            'compare',
+            'select',
+            [
+                'name' => 'compare',
+                'label' => __('Show Compare'),
+                'id' => 'compare',
+                'title' => __('Show Compare'),
+                'values' => $this->_yesno->getOptionArray(),
+                'class' => 'compare',
+                'value' => 1,
+            ]
+        );        
+
+        $fieldset->addField(
+            'wishlist',
+            'select',
+            [
+                'name' => 'wishlist',
+                'label' => __('Show Wishlist'),
+                'id' => 'wishlist',
+                'title' => __('Show Wishlist'),
+                'values' => $this->_yesno->getOptionArray(),
+                'class' => 'wishlist',
+                'value' => 1,
+            ]
+        );
+
+        $fieldset->addField(
+            'review',
+            'select',
+            [
+                'name' => 'review',
+                'label' => __('Show Review'),
+                'id' => 'review',
+                'title' => __('Show Review'),
+                'options' => $this->_yesno->getOptionArray(),
+                'class' => 'review',
+                'value' => 1,
             ]
         );
 
@@ -163,7 +214,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Status'),
                 'values' => $this->_status->getOptionArray(),
                 'class' => 'status',
-                'required' => true,
+                'value' => 1,
             ]
         );
         $form->setValues($model->getData());

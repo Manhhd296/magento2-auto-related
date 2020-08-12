@@ -1,13 +1,21 @@
 <?php
 use Magento\Framework\App\Action\Action;
+
 if($block->isPage('catalog_category_view')){$relateds = $block->getRelated(0);}
 elseif($block->isPage('cms_index_index')){$relateds = $block->getRelated(1);}
 elseif($block->isPage('checkout_cart_index')){$relateds = $block->getRelated(2);}
 elseif($block->isPage('catalog_product_view')){$relateds = $block->getRelated(3);}
 foreach ($relateds as $related){}
-	$stringIds = $related->getProducts();
-  $arrIds = explode(",",$stringIds);
-  $items = $block->getProductCollection($arrIds);?>
+$showCart     = $related->getCart();
+$showReview   = $related->getReview();
+$showCompare  = $related->getCompare();
+$showWishlist = $related->getWishlist();
+$stringIds    = $related->getProducts();
+$arrIds       = explode(",",$stringIds);
+$items        = $block->getProductCollection($arrIds);
+$image        = 'new_products_content_widget_grid';
+$templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+?>
 <div class="product-slider-block block widget block-products-list">
   <h2 class="product-slider-title"><?php echo $related->getTitle(); ?></h2>
 </div>
@@ -21,72 +29,81 @@ foreach ($relateds as $related){}
             <ol class="product-items widget-viewed-grid">
             <?php endif; ?>
             <?php foreach ($items as $_item): ?>
-              <?php $_imageHelper = $this->helper('Magento\Catalog\Helper\Image');
-              $imageUrl = $_imageHelper->init($_item, 'product_base_image')
-              ->constrainOnly(TRUE)
-              ->keepAspectRatio(TRUE)
-              ->keepTransparency(TRUE)
-              ->keepFrame(TRUE)
-              ->resize(240, 300)->getUrl();?>
-                  <li class="product-item">
-                    <div class="product-item-info">
-                      <a href="<?php echo $_item->getProductUrl(); ?>" class="product-item-photo">
-                        <span class="product-image-container" style="width:240px;">
-                          <span class="product-image-wrapper" style="padding-bottom: 125%;">
-                            <img class="product-image-photo" src="<?php echo $imageUrl; ?>" max-width="240" max-height="300" alt="<?php echo $_item->getName(); ?>">
-                          </span>
-                        </span>
-                      </a>
-                      <div class="product-item-details">
-                        <strong class="product-item-name">
-                          <a title="<?php echo $_item->getName(); ?>" href="<?php echo $_item->getProductUrl(); ?>" class="product-item-link"><?php echo $_item->getName(); ?></a>
-                        </strong>
+              <li class="product-item">
+                <div class="product-item-info">
+                  <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product-item-photo">
+                    <?= $block->getImage($_item, $image)->toHtml() ?>
+                  </a>
+                  <div class="product-item-details">
+                    <strong class="product-item-name">
+                      <a title="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" href="<?php echo $_item->getProductUrl(); ?>" class="product-item-link"><?= $_item->getName(); ?></a>
+                    </strong>
+                    <?php if($showReview): ?>
+                    <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                    <?php endif; ?>
+                    <?= $block->getProductPrice($_item) ?>
+                    <?php if ($_item->isAvailable()) :?>
+                      <?= $block->getProductDetailsHtml($_item) ?>
+                    <?php endif; ?>
 
-                        <?php echo $block->getProductPrice($_item); ?>
-                          <div class="product-item-inner">
-                            <div class="product-item-actions">
-                            <div class="actions-primary">
-                             <?php $postParams = $block->getAddToCartPostParams($_item); ?>
-                             <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
-                              <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
-                              <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
-                              <?php echo $block->getBlockHtml('formkey')?>
+                    <div class="product-item-inner">
+                      <div class="product-item-actions">
+                        <div class="actions-primary">
+                        <?php if($showCart): ?>
+                          <?php if ($_item->isSaleable()) : ?>
+                            <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+                            <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtmlAttr($_item->getSku()) ?>" action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
+                              <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
+                              <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                              <?= $block->getBlockHtml('formkey') ?>
                               <button type="submit"
-                              title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                              title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
                               class="action tocart primary">
-                              <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                              <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                             </button>
                           </form>
-                        </div>
-                        <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
-                        <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist">
-                          <span><?php echo __('Add to Wish List') ?></span>
+                          <?php else : ?>
+                            <?php if ($_item->getIsSalable()) : ?>
+                              <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                              <?php else : ?>
+                                <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                              <?php endif; ?>
+                            <?php endif; ?>
+                          <?php endif; ?>
+                          </div>
+                    <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
+                      <?php if($showWishlist): ?>
+                        <a href="#" data-post='<?= /* @noEscape */ $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist">
+                          <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                         </a>
+                      <?php endif; ?>
+                      <?php if($showCompare): ?>
                         <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
                         <a href="#" class="action tocompare"
                         data-post='<?= /** @noEscape */ $compareHelper->getPostDataParams($_item); ?>'
                         data-role="add-to-links"
-                        title="<?= /** @noEscape */ __('Add to Compare') ?>">
-                        <span><?= /** @noEscape */ __('Add to Compare') ?></span>
+                        title="<?= /** @noEscape */ $block->escapeHtml(__('Add to Compare')) ?>">
+                        <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                       </a>
-                    </div>
+                    <?php endif; ?>
                   </div>
                 </div>
               </div>
             </div>
-          </li>
-        <?php endforeach; ?>
-      </ol>
-    </div>
+          </div>
+        </li>
+      <?php endforeach; ?>
+    </ol>
   </div>
+</div>
 </div>
 <script type="text/x-magento-init">
 {
   "[data-role=tocart-form], .form.map.checkout": {
-    "catalogAddToCart": {
-    "bindSubmit": true
-    }
-  },
+        "catalogAddToCart": {
+        "bindSubmit": true
+      }
+    },
 
   "*": {
     "Magento_Ui/js/core/app": {

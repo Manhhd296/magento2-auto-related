@@ -3,7 +3,7 @@ namespace Magepow\Autorelated\Model;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
-class Slider implements OptionSourceInterface
+class Yesno implements OptionSourceInterface
 {
     /**
      * Get Grid row status type labels array.
