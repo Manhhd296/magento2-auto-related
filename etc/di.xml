@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magepow\Autorelated\Api\Data\GridInterface" type="Magepow\Autorelated\Model\Grid" />
-
-    <virtualType name="Magepow\Autorelated\Model\ResourceModel\Grid\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <preference for="Magepow\Autorelated\Api\Data\RelatedInterface" type="Magepow\Autorelated\Model\Related" />
+    <virtualType name="Magepow\Autorelated\Model\ResourceModel\Related\Related\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">magepow_autorelated</argument>
-            <argument name="resourceModel" xsi:type="string">Magepow\Autorelated\Model\ResourceModel\Grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magepow\Autorelated\Model\ResourceModel\Related</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="grid_record_grid_list_data_source" xsi:type="string">Magepow\Autorelated\Model\ResourceModel\Grid\Grid\Collection</item>
+                <item name="related_record_related_list_data_source" xsi:type="string">Magepow\Autorelated\Model\ResourceModel\Related\Related\Collection</item>
             </argument>
         </arguments>
     </type>

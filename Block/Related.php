@@ -3,7 +3,7 @@ namespace Magepow\Autorelated\Block;
 
 Class Related extends \Magento\Framework\View\Element\Template
 {
-	protected $gridFactory;
+	protected $relatedFactory;
 
 	protected $_productCollectionFactory;
 
@@ -20,31 +20,39 @@ Class Related extends \Magento\Framework\View\Element\Template
      */
     protected $imageBuilder;
 
+    /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry;
+
 
 	
 	public function __construct(
 		// \Magento\Framework\View\Element\Template\Context $context,
-		\Magepow\Autorelated\Model\GridFactory $gridFactory,
+		\Magepow\Autorelated\Model\RelatedFactory $relatedFactory,
 		\Magento\Catalog\Block\Product\ListProduct $listProductBlock,
 		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
 		\Magento\Framework\App\Request\Http $request,
 		\Magento\Catalog\Block\Product\Context $context,
 		array $data = []
 	){
-		$this->gridFactory = $gridFactory;
+		$this->relatedFactory = $relatedFactory;
 		$this->listProductBlock = $listProductBlock;
 		$this->_productCollectionFactory = $productCollectionFactory;
 		$this->_request = $request;
 		$this->reviewRenderer = $context->getReviewRenderer();
         $this->imageBuilder = $context->getImageBuilder();
+        $this->_coreRegistry = $context->getRegistry();
 		parent::__construct($context, $data);
 	}
 
 
 	public function getRelated($position)
 	{	
-		$collection = $this->gridFactory->create()->getCollection();
-		$collection->addFieldToFilter('is_active',1);
+		$collection = $this->relatedFactory->create()->getCollection();
+		// $collection->addFieldToFilter('is_active',1);
 		$collection->addFieldToFilter('position',$position);
 	
 		return $collection;
@@ -103,6 +111,20 @@ Class Related extends \Magento\Framework\View\Element\Template
 	    }
 	    return false;
 	}
+
+
+        /**
+     * Retrieve currently viewed product object
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function getProduct()
+    {
+        if (!$this->hasData('product')) {
+            $this->setData('product', $this->_coreRegistry->registry('product'));
+        }
+        return $this->getData('product');
+    }
 
     /**
      * Retrieve product details html

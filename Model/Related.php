@@ -1,9 +1,9 @@
 <?php
 namespace Magepow\Autorelated\Model;
 
-use Magepow\Autorelated\Api\Data\GridInterface;
+use Magepow\Autorelated\Api\Data\RelatedInterface;
 
-class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterface
+class Related extends \Magento\Framework\Model\AbstractModel implements RelatedInterface
 {
     /**
      * CMS page cache tag.
@@ -27,24 +27,24 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magepow\Autorelated\Model\ResourceModel\Grid');
+        $this->_init('Magepow\Autorelated\Model\ResourceModel\Related');
     }
     /**
-     * Get EntityId.
+     * Get RelatedId.
      *
      * @return int
      */
-    public function getEntityId()
+    public function getRelatedId()
     {
-        return $this->getData(self::ENTITY_ID);
+        return $this->getData(self::RELATED_ID);
     }
 
     /**
-     * Set EntityId.
+     * Set RelatedId.
      */
-    public function setEntityId($entityId)
+    public function setRelatedId($relatedId)
     {
-        return $this->setData(self::ENTITY_ID, $entityId);
+        return $this->setData(self::RELATED_ID, $relatedId);
     }
 
     /**
@@ -226,4 +226,27 @@ class Grid extends \Magento\Framework\Model\AbstractModel implements GridInterfa
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
+
+    // public function getProducts(\Magepow\Autorelated\Model\Grid $object)
+    // {
+    //     $id = $object->getId();
+    //     $tbl = $this->getResource()->getTable("magepow_autorelated");
+    //     $select = $this->getResource()->getConnection()->select()->from(
+    //         $tbl,
+    //         ['products']
+    //     )
+    //     ->where(
+    //         'related_id = ?',
+    //         (int)$id
+    //     );
+
+    //     $products = $this->getResource()->getConnection()->fetchCol($select);
+        
+    //     if ($products) {
+    //         $products = explode('&', $products[0]);
+    //     }
+
+    //     return $products;
+    // }
+
 }

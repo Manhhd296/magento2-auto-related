@@ -2,6 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magepow_Autorelated::manager" title="Magepow" module="Magepow_Autorelated" sortOrder="10" resource="Magepow_Autorelated::manager" />
-        <add id="Magepow_Autorelated::add_row" title="Automatic Related Product" module="Magepow_Autorelated" sortOrder="20" parent="Magepow_Autorelated::manager" action="grid/grid" resource="Magepow_Autorelated::add_row"/>
+        <add id="Magepow_Autorelated::add_row" title="Automatic Related Product" module="Magepow_Autorelated" sortOrder="20" parent="Magepow_Autorelated::manager" action="related/related" resource="Magepow_Autorelated::add_row"/>
     </menu>
 </config>

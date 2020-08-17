@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Autorelated\Controller\Adminhtml\Grid;
+namespace Magepow\Autorelated\Controller\Adminhtml\Related;
 
 class Index extends \Magento\Backend\App\Action
 {
@@ -28,8 +28,8 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Magepow_Autorelated::grid_list');
-        $resultPage->getConfig()->getTitle()->prepend(__('Related Product'));
+        $resultPage->setActiveMenu('Magepow_Autorelated::related_list');
+        $resultPage->getConfig()->getTitle()->prepend(__('Automatic Related Product'));
         return $resultPage;
     }
 
@@ -40,6 +40,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magepow_Autorelated::grid_list');
+        return $this->_authorization->isAllowed('Magepow_Autorelated::related_list');
     }
 }

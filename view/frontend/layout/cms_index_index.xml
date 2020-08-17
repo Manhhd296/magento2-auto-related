@@ -2,6 +2,16 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<body>  
         <referenceContainer name="content">
+
+<!-- 			<block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable"
+			     name="category.product.type.details.renderers.configurable"
+			     template="Magento_Swatches::product/listing/renderer.phtml">
+			        <arguments>
+			            <argument name="configurable_view_model"
+			                xsi:type="object">Magento\Swatches\ViewModel\Product\Renderer\Configurable</argument>
+			        </arguments>
+			</block> -->
+
             <block class="Magepow\Autorelated\Block\Related" name="home_page" template="Magepow_Autorelated::related.phtml" ifconfig="magepow_autorelated/general/enabled"/>
         </referenceContainer>
     </body>

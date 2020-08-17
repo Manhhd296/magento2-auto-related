@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Autorelated\Block\Adminhtml\Grid\Edit;
+namespace Magepow\Autorelated\Block\Adminhtml\Related\Edit;
 
 /**
  * Adminhtml Add New Row Form.
@@ -55,13 +55,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $form->setHtmlIdPrefix('mage_');
-        if ($model->getEntityId()) {
+        $form->setHtmlIdPrefix('magepow_');
+        if ($model->getRelatedId()) {
             $fieldset = $form->addFieldset(
                 'base_fieldset',
                 ['legend' => __('Edit Related Product'), 'class' => 'fieldset-wide']
             );
-            $fieldset->addField('entity_id', 'hidden', ['name' => 'entity_id']);
+            $fieldset->addField('related_id', 'hidden', ['name' => 'related_id']);
         } else {
             $fieldset = $form->addFieldset(
                 'base_fieldset',

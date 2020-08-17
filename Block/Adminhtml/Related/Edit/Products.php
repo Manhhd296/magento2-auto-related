@@ -1,6 +1,6 @@
 <?php
 
-namespace Magepow\Autorelated\Block\Adminhtml\Edit\Tab;
+namespace Magepow\Autorelated\Block\Adminhtml\Related\Edit;
 
 use Magepow\Autorelated\Model\ProductattachFactory;
 
@@ -33,15 +33,15 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $data
      */
     public function __construct(
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        ProductattachFactory $contactFactory,
+        \Magento\Framework\Registry $registry,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Registry $registry,
-        ProductattachFactory $contactFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
-        $this->contactFactory = $contactFactory;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->contactFactory = $contactFactory;
         $this->registry = $registry;
         //$this->attachModel = $attachModel;
         parent::__construct($context, $backendHelper, $data);
@@ -54,7 +54,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     public function _construct()
     {
         parent::_construct();
-        $this->setId('productsGrid');
+        $this->setId('index');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
@@ -170,7 +170,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/productsgrid', ['_current' => true]);
+        return $this->getUrl('*/*/index', ['_current' => true]);
     }
     
     public function getTabUrl()
@@ -179,14 +179,14 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $customerId = $this->getRequest()->getParam('id');
         
         $_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $productCollection = $_objectManager->create('Magepow\Autorelated\Model\Grid');
+        $productCollection = $_objectManager->create('Magepow\Autorelated\Model\Related');
         $productCollection = $productCollection->getCollection()->addFieldToFilter('customer_id', $customerId);
         
         if($productCollection->count() > 0){
             $id = $productCollection->getFirstItem()->getId();
         }
         
-        return $this->getUrl('grid/*/products', ['entity_id' => $id, '_current' => true]);
+        return $this->getUrl('related/*/index', ['entity_id' => $id, '_current' => true]);
     }
 
     /**

@@ -1,15 +1,17 @@
 <?php
 use Magento\Framework\App\Action\Action;
-
-if($block->isPage('catalog_category_view')){$relateds = $block->getRelated(0);}
-elseif($block->isPage('cms_index_index')){$relateds = $block->getRelated(1);}
-elseif($block->isPage('checkout_cart_index')){$relateds = $block->getRelated(2);}
+if($block->isPage('catalog_category_view')){$relateds    = $block->getRelated(0);}
+elseif($block->isPage('cms_index_index')){$relateds      = $block->getRelated(1);}
+elseif($block->isPage('checkout_cart_index')){$relateds  = $block->getRelated(2);}
 elseif($block->isPage('catalog_product_view')){$relateds = $block->getRelated(3);}
 foreach ($relateds as $related){}
+$isActive     = $related->getIs_active();
+if(!$isActive) return;
 $showCart     = $related->getCart();
 $showReview   = $related->getReview();
 $showCompare  = $related->getCompare();
 $showWishlist = $related->getWishlist();
+$activeSlider = $related->getSlider();
 $stringIds    = $related->getProducts();
 $arrIds       = explode(",",$stringIds);
 $items        = $block->getProductCollection($arrIds);
@@ -19,15 +21,10 @@ $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VI
 <div class="product-slider-block block widget block-products-list">
   <h2 class="product-slider-title"><?php echo $related->getTitle(); ?></h2>
 </div>
-
 <div class="block widget block-products-list grid">
   <div class="block-content">
     <div class="products-grid grid">
-      <?php if($related->getSlider() == 1): ?>
-        <ol class="product-items widget-viewed-grid regular slider">
-          <?php else: ?>
-            <ol class="product-items widget-viewed-grid">
-            <?php endif; ?>
+        <ol class="product-items widget-viewed-grid <?= $activeSlider == 1 ? 'regular slider' : '' ?>">
             <?php foreach ($items as $_item): ?>
               <li class="product-item">
                 <div class="product-item-info">
@@ -42,10 +39,6 @@ $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VI
                     <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                     <?php endif; ?>
                     <?= $block->getProductPrice($_item) ?>
-                    <?php if ($_item->isAvailable()) :?>
-                      <?= $block->getProductDetailsHtml($_item) ?>
-                    <?php endif; ?>
-
                     <div class="product-item-inner">
                       <div class="product-item-actions">
                         <div class="actions-primary">

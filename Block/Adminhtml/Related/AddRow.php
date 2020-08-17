@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Autorelated\Block\Adminhtml\Grid;
+namespace Magepow\Autorelated\Block\Adminhtml\Related;
 
 class AddRow extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -31,7 +31,7 @@ class AddRow extends \Magento\Backend\Block\Widget\Form\Container
     {
         $this->_objectId = 'row_id';
         $this->_blockGroup = 'Magepow_Autorelated';
-        $this->_controller = 'adminhtml_grid';
+        $this->_controller = 'adminhtml_related';
         parent::_construct();
         if ($this->_isAllowedAction('Magepow_Autorelated::add_row')) {
             $this->buttonList->update('save', 'label', __('Save'));

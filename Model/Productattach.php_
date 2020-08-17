@@ -21,7 +21,7 @@ class Productattach extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magepow\Autorelated\Model\ResourceModel\Grid');
+        $this->_init('Magepow\Autorelated\Model\ResourceModel\Related');
     }
     
     public function getProducts(\Magepow\Autorelated\Model\Productattach $object)
@@ -33,7 +33,7 @@ class Productattach extends \Magento\Framework\Model\AbstractModel
             ['products']
         )
         ->where(
-            'entity_id = ?',
+            'related_id = ?',
             (int)$id
         );
 

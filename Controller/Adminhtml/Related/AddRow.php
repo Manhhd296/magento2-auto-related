@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Autorelated\Controller\Adminhtml\Grid;
+namespace Magepow\Autorelated\Controller\Adminhtml\Related;
 
 use Magento\Framework\Controller\ResultFactory;
 
@@ -11,40 +11,40 @@ class AddRow extends \Magento\Backend\App\Action
     private $coreRegistry;
 
     /**
-     * @var \Magepow\Autorelated\Model\GridFactory
+     * @var \Magepow\Autorelated\Model\RelatedFactory
      */
-    private $gridFactory;
+    private $relatedFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry,
-     * @param \Magepow\Autorelated\Model\GridFactory $gridFactory
+     * @param \Magepow\Autorelated\Model\RelatedFactory $relatedFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magepow\Autorelated\Model\GridFactory $gridFactory
+        \Magepow\Autorelated\Model\RelatedFactory $relatedFactory
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;
-        $this->gridFactory = $gridFactory;
+        $this->relatedFactory = $relatedFactory;
     }
 
     /**
-     * Mapped Grid List page.
+     * Mapped Related List page.
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $rowId = (int) $this->getRequest()->getParam('id');
-        $rowData = $this->gridFactory->create();
+        $rowData = $this->relatedFactory->create();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         if ($rowId) {
             $rowData = $rowData->load($rowId);
             $rowTitle = $rowData->getTitle();
-            if (!$rowData->getEntityId()) {
+            if (!$rowData->getRelatedId()) {
                 $this->messageManager->addError(__('row data no longer exist.'));
-                $this->_redirect('grid/grid/rowdata');
+                $this->_redirect('related/related/rowdata');
                 return;
             }
         }

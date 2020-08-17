@@ -1,10 +1,10 @@
 <?php
-namespace Magepow\Autorelated\Controller\Adminhtml\Grid;
+namespace Magepow\Autorelated\Controller\Adminhtml\Related;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magepow\Autorelated\Model\ResourceModel\Grid\CollectionFactory;
+use Magepow\Autorelated\Model\ResourceModel\Related\CollectionFactory;
 
 class MassDelete extends \Magento\Backend\App\Action
 {
@@ -43,7 +43,7 @@ class MassDelete extends \Magento\Backend\App\Action
         $collection = $this->_filter->getCollection($this->_collectionFactory->create());
         $recordDeleted = 0;
         foreach ($collection->getItems() as $record) {
-            $record->setId($record->getEntityId());
+            $record->setId($record->getRelatedId());
             $record->delete();
             $recordDeleted++;
         }

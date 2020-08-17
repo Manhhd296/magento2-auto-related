@@ -1,5 +1,5 @@
 <?php
-namespace Magepow\Autorelated\Ui\Component\Listing\Grid\Column;
+namespace Magepow\Autorelated\Ui\Component\Listing\Related\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -9,7 +9,7 @@ use Magento\Framework\UrlInterface;
 class Action extends Column
 {
     /** Url path */
-    const ROW_EDIT_URL = 'grid/grid/addrow';
+    const ROW_EDIT_URL = 'related/related/addrow';
     /** @var UrlInterface */
     protected $_urlBuilder;
 
@@ -51,11 +51,11 @@ class Action extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $name = $this->getData('name');
-                if (isset($item['entity_id'])) {
+                if (isset($item['related_id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->_urlBuilder->getUrl(
                             $this->_editUrl,
-                            ['id' => $item['entity_id']]
+                            ['id' => $item['related_id']]
                         ),
                         'label' => __('Edit'),
                     ];

@@ -1,12 +1,12 @@
 <?php
 namespace Magepow\Autorelated\Api\Data;
 
-interface GridInterface
+interface RelatedInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case.
      */
-    const ENTITY_ID = 'entity_id';
+    const RELATED_ID = 'related_id';
     const TITLE     = 'title';
     const PRODUCTS  = 'products';
     const POSITION  = 'position';
@@ -15,20 +15,20 @@ interface GridInterface
     const CART      = 'cart';
     const COMPARE   = 'compare';
     const WISHLIST  = 'wishlist';
-    const REVIEW  = 'review';
+    const REVIEW    = 'review';
     const IS_ACTIVE = 'is_active';
 
    /**
-    * Get EntityId.
+    * Get RelatedId.
     *
     * @return int
     */
-    public function getEntityId();
+    public function getRelatedId();
 
    /**
-    * Set EntityId.
+    * Set RelatedId.
     */
-    public function setEntityId($entityId);
+    public function setRelatedId($relatedId);
 
    /**
     * Get Title.

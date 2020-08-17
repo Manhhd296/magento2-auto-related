@@ -2,14 +2,14 @@
 namespace Magepow\Autorelated\Model\ResourceModel;
 
 /**
- * Grid Grid mysql resource.
+ * Related mysql resource.
  */
-class Grid extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Related extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var string
      */
-    protected $_idFieldName = 'entity_id';
+    protected $_idFieldName = 'related_id';
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -36,6 +36,6 @@ class Grid extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('magepow_autorelated', 'entity_id');
+        $this->_init('magepow_autorelated', 'related_id');
     }
 }

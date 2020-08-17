@@ -1,20 +1,20 @@
 <?php
-namespace Magepow\Autorelated\Model\ResourceModel\Grid;
+namespace Magepow\Autorelated\Model\ResourceModel\Related;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var string
      */
-    protected $_idFieldName = 'entity_id';
+    protected $_idFieldName = 'related_id';
     /**
      * Define resource model.
      */
     protected function _construct()
     {
         $this->_init(
-            'Magepow\Autorelated\Model\Grid',
-            'Magepow\Autorelated\Model\ResourceModel\Grid'
+            'Magepow\Autorelated\Model\Related',
+            'Magepow\Autorelated\Model\ResourceModel\Related'
         );
     }
 }

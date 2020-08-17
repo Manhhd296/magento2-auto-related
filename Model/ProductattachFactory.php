@@ -25,6 +25,6 @@ class ProductattachFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magepow\Autorelated\Model\Grid', $arguments, false);
+        return $this->_objectManager->create('Magepow\Autorelated\Model\Related', $arguments, false);
     }
 }

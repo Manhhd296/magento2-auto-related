@@ -31,11 +31,11 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()->newTable(
             $installer->getTable('magepow_autorelated')
         )->addColumn(
-            'entity_id',
+            'related_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['identity' => true, 'nullable' => false, 'primary' => true],
-            'Grid Record Id'
+            'Related Id'
         )->addColumn(
             'title',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -71,7 +71,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             [],
-            'Show Add To Cart'
+            'Show Cart'
         )->addColumn(
             'compare',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -97,7 +97,7 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Active Status'
         )->setComment(
-            'Row Data Table'
+            'Magepow Related Product'
         );
 
         $installer->getConnection()->createTable($table);
